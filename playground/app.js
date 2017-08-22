@@ -6,6 +6,7 @@ import "codemirror/mode/javascript/javascript";
 import { shouldRender } from "../src/utils";
 import { samples } from "./samples";
 import Form from "../src";
+import TabForm from "../src/components/TabForm";
 
 // Import a few CodeMirror themes; these are used to match alternative
 // bootstrap ones.
@@ -242,7 +243,7 @@ class Editor extends Component {
 class Selector extends Component {
   constructor(props) {
     super(props);
-    this.state = { current: "Simple" };
+    this.state = { current: "DCOS" };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -253,7 +254,7 @@ class Selector extends Component {
     return event => {
       event.preventDefault();
       this.setState({ current: label });
-      setImmediate(() => this.props.onSelected(samples[label]));
+      setImmediate(() => this.props.onSelected(samples[label], label));
     };
   };
 
@@ -332,17 +333,19 @@ class App extends Component {
   constructor(props) {
     super(props);
     // initialize state with Simple data sample
-    const { schema, uiSchema, formData, validate } = samples.Simple;
+    const dcosExample = samples.DCOS;
     this.state = {
       form: false,
-      schema,
-      uiSchema,
-      formData,
-      validate,
+      schema: null,
+      uiSchema: null,
+      formData: null,
+      validate: null,
       editor: "default",
       theme: "default",
       liveValidate: true,
       shareURL: null,
+      dcosExample,
+      selectedExample: "DCOS"
     };
   }
 
@@ -355,7 +358,7 @@ class App extends Component {
         alert("Unable to load form setup data.");
       }
     } else {
-      this.load(samples.Simple);
+      this.load(samples.DCOS, "DCOS");
     }
   }
 
@@ -363,11 +366,12 @@ class App extends Component {
     return shouldRender(this, nextProps, nextState);
   }
 
-  load = data => {
+  load = (data, label) => {
     // Reset the ArrayFieldTemplate whenever you load new data
     const { ArrayFieldTemplate } = data;
+
     // force resetting form component instance
-    this.setState({ form: false }, _ =>
+    this.setState({ form: false, selectedExample: label }, _ =>
       this.setState({ ...data, form: true, ArrayFieldTemplate })
     );
   };
@@ -413,6 +417,8 @@ class App extends Component {
       editor,
       ArrayFieldTemplate,
       transformErrors,
+      dcosExample,
+      selectedExample
     } = this.state;
 
     return (
@@ -463,7 +469,12 @@ class App extends Component {
           </div>
         </div>
         <div className="col-sm-5">
-          {this.state.form &&
+          {selectedExample === "DCOS" ? 
+            <TabForm
+            data={dcosExample}>
+            </TabForm> 
+            :
+            this.state.form &&
             <Form
               ArrayFieldTemplate={ArrayFieldTemplate}
               liveValidate={liveValidate}

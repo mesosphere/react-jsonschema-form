@@ -14,8 +14,10 @@ import files from "./files";
 import single from "./single";
 import customArray from "./customArray";
 import alternatives from "./alternatives";
+import dcos from './dcos';
 
 export const samples = {
+  DCOS: dcos,
   Simple: simple,
   Nested: nested,
   Arrays: arrays,
