@@ -171,6 +171,7 @@ export default class Form extends Component {
       enctype,
       acceptcharset,
       noHtml5Validate,
+      customComponents
     } = this.props;
 
     const { schema, uiSchema, formData, errorSchema, idSchema } = this.state;
@@ -201,6 +202,7 @@ export default class Form extends Component {
           onBlur={this.onBlur}
           onFocus={this.onFocus}
           registry={registry}
+          customComponents={customComponents}
           safeRenderCompletion={safeRenderCompletion}
         />
         {children
@@ -247,5 +249,6 @@ if (process.env.NODE_ENV !== "production") {
     transformErrors: PropTypes.func,
     safeRenderCompletion: PropTypes.bool,
     formContext: PropTypes.object,
+    customComponents: PropTypes.object
   };
 }

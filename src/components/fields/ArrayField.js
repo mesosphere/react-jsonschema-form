@@ -555,6 +555,7 @@ class ArrayField extends Component {
           disabled={this.props.disabled}
           readonly={this.props.readonly}
           autofocus={autofocus}
+          customComponents={this.props.customComponents}
         />
       ),
       className: "array-item",

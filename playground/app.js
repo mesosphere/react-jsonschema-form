@@ -6,7 +6,7 @@ import "codemirror/mode/javascript/javascript";
 import { shouldRender } from "../src/utils";
 import { samples } from "./samples";
 import Form from "../src";
-import TabForm from "../src/components/TabForm";
+import CustomComponentForm from "../src/components/CustomComponentForm";
 
 // Import a few CodeMirror themes; these are used to match alternative
 // bootstrap ones.
@@ -470,9 +470,9 @@ class App extends Component {
         </div>
         <div className="col-sm-5">
           {selectedExample === "DCOS" ? 
-            <TabForm
+            <CustomComponentForm
             data={dcosExample}>
-            </TabForm> 
+            </CustomComponentForm> 
             :
             this.state.form &&
             <Form

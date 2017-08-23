@@ -9,16 +9,15 @@ export default class TabForm extends Component {
         super(props);
         this.state = {
             selectedTab: Object.keys(props.data.properties)[0]
-        }
-        this.data = props.data;
+        };
     }
 
     handleClick(key) {
-        this.setState({selectedTab: key});
+        this.setState({ selectedTab: key });
     }
 
     render() {
-        const tabs = Object.keys(this.data.properties).map((key) => {
+        const tabs = Object.keys(this.props.data.properties).map((key) => {
             return (
                 <div key={key} onClick={this.handleClick.bind(this, key)}>{key}</div>
             );
@@ -31,16 +30,18 @@ export default class TabForm extends Component {
                 </div>
                 <div className="col-sm-9">
                     <Form
-                    schema={this.data.properties[this.state.selectedTab]}
+                    schema={this.props.data.properties[this.state.selectedTab]}
                     uiSchema={{}}
-                    formData={{}}>
+                    formData={{}}
+                    customComponents={this.props.customComponents}>
                     </Form>
                 </div>
             </div>
-        )
+        );
     }
 }
 
 TabForm.propTypes = {
-    data: PropTypes.object.isRequired 
+    data: PropTypes.object.isRequired,
+    customComponents: PropTypes.object
 };

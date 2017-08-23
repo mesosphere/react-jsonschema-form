@@ -21,7 +21,7 @@ const COMPONENT_TYPES = {
   string: "StringField",
 };
 
-function getFieldComponent(schema, uiSchema, fields) {
+function getFieldComponent(schema, uiSchema, fields, customComponents) {
   const field = uiSchema["ui:field"];
   if (typeof field === "function") {
     return field;
@@ -29,6 +29,11 @@ function getFieldComponent(schema, uiSchema, fields) {
   if (typeof field === "string" && field in fields) {
     return fields[field];
   }
+
+  if (customComponents && schema.type in customComponents) {
+    return customComponents[schema.type];
+  }
+
   const componentName = COMPONENT_TYPES[schema.type];
   return componentName in fields ? fields[componentName] : UnsupportedField;
 }
@@ -151,6 +156,7 @@ function SchemaFieldRender(props) {
     name,
     required,
     registry = getDefaultRegistry(),
+    customComponents
   } = props;
   const {
     definitions,
@@ -159,7 +165,7 @@ function SchemaFieldRender(props) {
     FieldTemplate = DefaultTemplate,
   } = registry;
   const schema = retrieveSchema(props.schema, definitions);
-  const FieldComponent = getFieldComponent(schema, uiSchema, fields);
+  const FieldComponent = getFieldComponent(schema, uiSchema, fields, customComponents);
   const { DescriptionField } = fields;
   const disabled = Boolean(props.disabled || uiSchema["ui:disabled"]);
   const readonly = Boolean(props.readonly || uiSchema["ui:readonly"]);
@@ -200,6 +206,7 @@ function SchemaFieldRender(props) {
       autofocus={autofocus}
       errorSchema={fieldErrorSchema}
       formContext={formContext}
+      customComponents={customComponents}
     />
   );
 
@@ -279,6 +286,7 @@ SchemaField.defaultProps = {
   disabled: false,
   readonly: false,
   autofocus: false,
+  customComponents: {}
 };
 
 if (process.env.NODE_ENV !== "production") {
@@ -298,6 +306,7 @@ if (process.env.NODE_ENV !== "production") {
       FieldTemplate: PropTypes.func,
       formContext: PropTypes.object.isRequired,
     }),
+    customComponents: PropTypes.object
   };
 }
 

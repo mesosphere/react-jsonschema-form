@@ -99,6 +99,7 @@ class ObjectField extends Component {
               registry={registry}
               disabled={disabled}
               readonly={readonly}
+              customComponents={this.props.customComponents}
             />
           );
         })}
