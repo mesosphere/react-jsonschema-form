@@ -1,3 +1,3 @@
-import Form from "./components/Form";
+import TabForm from "./components/TabForm";
 
-export default Form;
+export default TabForm;
